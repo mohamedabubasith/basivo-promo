@@ -1,6 +1,6 @@
 # BP-006 Web capture, secret resolver, login handover
 
-Status: todo
+Status: done (v0.2.0)
 
 ## Tasks
 - [ ] `promo.py capture`: flow steps (goto, click, type, scroll, wait), desktop and mobile emulation, 2x DPR.

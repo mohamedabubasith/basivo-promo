@@ -1,6 +1,6 @@
 # BP-012 (parent) Editor-style videos on HyperFrames
 
-Status: doing
+Status: done (v0.2.0)
 
 ## Why
 User review of the first renders (2026-10-25):

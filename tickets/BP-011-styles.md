@@ -1,6 +1,6 @@
 # BP-011 Personal and team taste
 
-Status: doing (reworked by BP-012)
+Status: done (v0.2.0)
 
 Everyone has their own taste. A style is a small JSON "taste profile" (palette, pace, movement,
 music, voice, look) found in `promo-styles/` (team), `~/.basivo-promo/styles/` (personal) or built in.

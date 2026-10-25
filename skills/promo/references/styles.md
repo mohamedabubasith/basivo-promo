@@ -1,10 +1,10 @@
 # Styles
 
 A style is a JSON file of defaults: colours, pace, transition, music, voice, backdrop and
-cursor. A storyboard picks one with `"style": "<name>"` and can still override any field.
+cursor. A promo.json picks one with `"style": "<name>"` and can still override any field.
 
 Lookup order (first match wins):
-1. `promo-styles/<name>.json` in the storyboard folder or any of its 4 parent folders
+1. `promo-styles/<name>.json` in the promo folder or any of its 4 parent folders
    (a team can commit `promo-styles/` to share a house style).
 2. `~/.basivo-promo/styles/<name>.json` (personal styles).
 3. Built-in: `midnight` (default), `daylight`, `neon`, `editorial`, `playful`.

@@ -1,0 +1,13 @@
+#!/bin/sh
+# Pinned HyperFrames CLI for basivo-promo. Telemetry is off and nothing is installed into your
+# Claude Code skills behind your back. Bump HF_VERSION deliberately, after testing.
+HF_VERSION="0.8.198"
+export HYPERFRAMES_NO_TELEMETRY=1 DO_NOT_TRACK=1 HYPERFRAMES_SKIP_SKILLS=1
+if ! command -v node >/dev/null 2>&1; then
+  echo "basivo-promo: Node.js 22+ is required for HyperFrames: https://nodejs.org" >&2; exit 1
+fi
+major=$(node -p 'process.versions.node.split(".")[0]' 2>/dev/null || echo 0)
+if [ "$major" -lt 22 ]; then
+  echo "basivo-promo: HyperFrames needs Node.js 22+, found $(node --version)" >&2; exit 1
+fi
+exec npx --yes "hyperframes@$HF_VERSION" "$@"

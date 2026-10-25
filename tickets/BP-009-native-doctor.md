@@ -1,6 +1,6 @@
 # BP-009 Mobile/desktop recording, doctor, release
 
-Status: todo
+Status: done (v0.2.0)
 
 ## Tasks
 - [ ] Helpers (each confirmed): `xcrun simctl io booted recordVideo`, `adb shell screenrecord`, macOS `screencapture -v`.

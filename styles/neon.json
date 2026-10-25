@@ -1,11 +1,33 @@
 {
   "name": "neon",
   "description": "High-energy launch. Near-black with cyan and magenta, zoom-through cuts, upbeat 120 BPM music.",
-  "brand": {"bg": "#07070c", "fg": "#ffffff", "accent": "#00d5ff", "accent2": "#ff2bd6", "muted": "#a0a6b8", "font": "Inter", "personality": "energetic"},
-  "voice": {"engine": "kokoro", "voice": "am_adam", "speed": 1.05},
-  "music": {"style": "peppy", "seed": 21, "volume": 0.6},
-  "captions": {"burn": true},
+  "brand": {
+    "bg": "#07070c",
+    "fg": "#ffffff",
+    "accent": "#00d5ff",
+    "accent2": "#ff2bd6",
+    "muted": "#a0a6b8",
+    "font": "Inter",
+    "personality": "energetic"
+  },
+  "voice": {
+    "engine": "kokoro",
+    "voice": "am_adam",
+    "speed": 1.05
+  },
+  "music": {
+    "style": "peppy",
+    "seed": 21,
+    "volume": 0.6
+  },
+  "captions": {
+    "burn": true
+  },
   "transition": "zoom",
-  "look": {"backdrop": "aurora", "cursor": "light"},
-  "sfx": true
+  "look": {
+    "backdrop": "aurora",
+    "cursor": "light"
+  },
+  "sfx": true,
+  "direction": "High-energy launch. Fast beat-synced cuts, zoom-throughs, kinetic type that slams in, speed ramps on footage, punchy SFX."
 }

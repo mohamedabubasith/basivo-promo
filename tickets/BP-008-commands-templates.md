@@ -1,6 +1,6 @@
 # BP-008 Commands, skill, 5 more templates, 9:16 and 1:1
 
-Status: todo
+Status: replaced by BP-012 (HyperFrames)
 
 ## Tasks
 - [ ] `/promo` wizard: 4 questions, writes the storyboard once.

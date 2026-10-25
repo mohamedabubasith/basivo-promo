@@ -1,4 +1,5 @@
 # Plan: basivo-promo — Claude Code plugin for sales promo videos
+> Historical: v0.1 plan. v0.2 moved rendering to HyperFrames (see tickets/BP-012 and CHANGELOG).
 
 ## Goal
 `/promo <url or app>` → a polished, animated 30–90 s product promo (web, mobile, desktop) with music, a local voiceover, captions and several aspect ratios. Every action is confirmed in a popup. Secrets never reach the model. Token use stays low.

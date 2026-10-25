@@ -1,11 +1,33 @@
 {
   "name": "daylight",
   "description": "Light, clean and trustworthy. Near-white canvas, blue accents, fine grid, calm music. Good for B2B and finance.",
-  "brand": {"bg": "#f7f7f4", "fg": "#111827", "accent": "#2563eb", "accent2": "#7c3aed", "muted": "#5b6472", "font": "Inter", "personality": "premium"},
-  "voice": {"engine": "kokoro", "voice": "af_heart", "speed": 1.0},
-  "music": {"style": "calm", "seed": 11, "volume": 0.45},
-  "captions": {"burn": true},
+  "brand": {
+    "bg": "#f7f7f4",
+    "fg": "#111827",
+    "accent": "#2563eb",
+    "accent2": "#7c3aed",
+    "muted": "#5b6472",
+    "font": "Inter",
+    "personality": "premium"
+  },
+  "voice": {
+    "engine": "kokoro",
+    "voice": "af_heart",
+    "speed": 1.0
+  },
+  "music": {
+    "style": "calm",
+    "seed": 11,
+    "volume": 0.45
+  },
+  "captions": {
+    "burn": true
+  },
   "transition": "push-left",
-  "look": {"backdrop": "grid", "cursor": "dark"},
-  "sfx": true
+  "look": {
+    "backdrop": "grid",
+    "cursor": "dark"
+  },
+  "sfx": true,
+  "direction": "Light and trustworthy. Clean grids, generous white space, precise 0.5 s moves, product UI at large scale. Minimal effects."
 }

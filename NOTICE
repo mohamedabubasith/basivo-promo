@@ -19,9 +19,18 @@ Downloaded at runtime by `promo setup` (not redistributed here):
    kokoro-v1.0.int8.onnx sha256 6e742170d309016e5891a994e1ce1559c702a2ccd0075e67ef7157974f6406cb
    voices-v1.0.bin       sha256 bca610b8308e8d99f32e6fe4197e7ec01679264efed0cac9140fe9c29f1fbf7d
 
-Motion-design rules in skills/promo/references/motion.md and templates/runtime.js are adapted
-(not copied) from: LottieFiles/motion-design-skill (MIT), heygen-com/hyperframes skills
-(Apache-2.0), AbubakrChan/product-launch-motion (MIT).
+4. vendor/uupm/*.csv (styles, colors, typography, products, motion)
+   UI UX Pro Max, https://github.com/nextlevelbuilder/ui-ux-pro-max-skill
+   MIT License. Full text: vendor/uupm/LICENSE. Commit: vendor/uupm/SOURCE_COMMIT
+
+Run through npx at a pinned version by scripts/hf (not bundled):
+
+5. HyperFrames 0.8.198, https://github.com/heygen-com/hyperframes, Apache License 2.0.
+   Telemetry is switched off (HYPERFRAMES_NO_TELEMETRY=1, DO_NOT_TRACK=1).
+
+Motion-design rules in skills/promo/SKILL.md are adapted (not copied) from:
+LottieFiles/motion-design-skill (MIT), heygen-com/hyperframes skills (Apache-2.0),
+AbubakrChan/product-launch-motion (MIT).
 
 Python dependencies installed by uv (not bundled): playwright (Apache-2.0), kokoro-onnx (MIT),
 onnxruntime (MIT), numpy (BSD-3-Clause), soundfile (BSD-3-Clause).

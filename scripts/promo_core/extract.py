@@ -10,7 +10,7 @@ from pathlib import Path
 from urllib.parse import urlparse
 
 from . import ff
-from .browser import launch
+from .browser import CONSENT_JS, launch
 from .mask_pii import mask
 from .paths import PromoError, slug
 
@@ -199,9 +199,18 @@ def palette(facts):
         else:
             weight[c] = area + 1
     ranked = sorted(weight, key=weight.get, reverse=True)
+    if not ranked:
+        # Monochrome brands (black CTAs on white): the solid button colour is the accent, not a stock blue.
+        solid = {}
+        for b in facts.get("buttons", []):
+            c = _rgb(b.get("bg"))
+            if c and contrast(c, bg) >= 3:
+                solid[c] = solid.get(c, 0) + b.get("area", 0)
+        ranked = sorted(solid, key=solid.get, reverse=True)[:1]
     accent = ranked[0] if ranked else ((108, 92, 255) if _lum(bg) < 0.4 else (37, 99, 235))
     # Second accent: a brand colour in a neighbouring hue (status reds/greens rarely belong in a gradient).
-    accent2 = next((c for c in ranked[1:6] if _distinct(c, accent) and 12 <= _hue_gap(c, accent) <= 75), _hue_shift(accent, 40))
+    accent2 = next((c for c in ranked[1:6] if _distinct(c, accent) and 12 <= _hue_gap(c, accent) <= 75),
+                   _hue_shift(accent, 40) if _sat(accent) > 0.25 else muted)
     return {"bg": _hex(bg), "fg": _hex(fg), "accent": _hex(accent), "accent2": _hex(accent2), "muted": _hex(muted),
             "theme": "dark" if _lum(bg) < 0.4 else "light"}
 
@@ -278,13 +287,14 @@ def from_url(url, folder, session=None, log=print):
 
     if urlparse(url).scheme not in ("http", "https"):
         raise PromoError("extract needs an http(s) URL")
-    out = Path(folder) / "brand"
+    out = Path(folder) / "assets" / "brand"
     out.mkdir(parents=True, exist_ok=True)
     with sync_playwright() as p:
         browser, _ = launch(p)
         try:
             ctx = browser.new_context(viewport={"width": 1440, "height": 900}, device_scale_factor=2,
                                       storage_state=str(session) if session else None, color_scheme="light")
+            ctx.add_init_script(CONSENT_JS)
             page = ctx.new_page()
             try:
                 page.goto(url, wait_until="networkidle", timeout=45000)
@@ -311,7 +321,7 @@ def from_image(image, folder, is_logo=False):
     src = Path(image)
     if not src.is_file():
         raise PromoError(f"image not found: {src}")
-    out = Path(folder) / "brand"
+    out = Path(folder) / "assets" / "brand"
     out.mkdir(parents=True, exist_ok=True)
     ff.need("ffmpeg")
     raw = subprocess.run(["ffmpeg", "-v", "error", "-i", str(src), "-vf", "scale=96:96:flags=area,format=rgba", "-f", "rawvideo", "-"],

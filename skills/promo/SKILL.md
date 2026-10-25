@@ -1,61 +1,87 @@
 ---
 name: promo
-description: Make a production-ready animated promo or sales video of a web, mobile or desktop app with basivo-promo. Use when the user asks for a product video, promo video, demo video, launch video, sales video or app showcase, or wants to change, re-render or restyle one.
+description: Make a production-ready promo, launch, demo or sales video of a web, mobile or desktop app with basivo-promo (HyperFrames + real screen recordings). Use when the user asks for a product video, promo, demo, launch film, sales video or app showcase, or wants one changed, restyled or re-rendered.
 ---
 
 # basivo-promo
 
-You direct; scripts do the work. You write one small `storyboard.json` and run `promo` commands.
-Never read video frames, screenshots or audio unless the user asks you to look at something.
+You are the editor. Scripts record, cut, voice, score and render; you write the creative plan and
+the HyperFrames compositions. Do not look at frames or audio unless something needs checking.
 
-`P="${CLAUDE_PLUGIN_ROOT}/scripts/promo"`. Every `$P` call opens a confirmation popup for the user
-(the plugin's gate hook). That is expected; do not try to avoid it.
+`P="${CLAUDE_PLUGIN_ROOT}/scripts/promo"` and `HF="${CLAUDE_PLUGIN_ROOT}/scripts/hf"` (pinned
+HyperFrames, telemetry off). Never call `npx hyperframes` directly; the gate denies it. Every
+`$P` call and every writing `$HF` call opens a confirmation popup. That is expected.
 
-## Workflow
+## 1. Assets first
 
-1. **Assets first.** Ask what they already have before anything else: website or app URL, logo or
-   brand images, screen recordings, a brand kit. Use what exists; only ask for what is missing.
-2. `$P new "<Product>" --title <slug> [--url <url>]` creates `promos/<product>/<date>-<slug>/`.
-3. If there is a public URL: `$P extract <folder> <url>` adopts colours, font, logo and copy. It
-   writes `brand/content.json` (headings, features, CTAs, stats), `brand/hero.png`, `brand/page.png`
-   and a style named after the product. Image instead: `$P extract <folder> <image> [--logo]`.
-   Read `brand/content.json` (small) for copy ideas. Never paste site text you did not get from it.
-4. Ask only what is still unknown, in one AskUserQuestion round: audience and the one message,
-   length (30, 45, 60 or 90 s), formats (16x9, 9x16, 1x1), style (the adopted one is the default;
-   others: `$P styles`; or build one with /promo-style), voice (male, female, none).
-5. App behind a login: prefer `$P login <url>` (the user logs in in a visible browser; cookies are
-   saved locally) and `"login": "session"`. Otherwise use `${secret:name}` in a fill step; the user
-   is asked in a local popup. **Never ask for a password, token or code in chat.**
-6. Write the `capture` steps, run `$P capture <storyboard>`. Use `"point": "auto"` for click scenes.
-   Mobile app or desktop app: `$P record <storyboard> ios|android|mac --seconds N --name x`, or
-   `$P import <storyboard> <file> --name x` for files the user gives you.
-7. Write the scenes (see references/storyboard.md), `$P validate <storyboard>`.
-8. `$P render <storyboard> --draft` (run it in the background; it can take minutes). Share the
-   paths. After feedback, edit the JSON and render without `--draft`.
+In one AskUserQuestion, ask what they have: website or app URL, logo, images, screen
+recordings, brand kit, a reference video they like. Use what exists before asking anything else.
 
-## Writing rules
+- `$P new "<Product>" --title <slug> --url <url> --length <s> --formats 16x9,9x16`
+  creates `promos/<product>/<date>-<slug>/` with `promo.json` and `assets/`.
+- URL: `$P extract <folder> <url>` writes `assets/brand/{brand.json,content.json,hero.png,logo.*}`
+  and a taste profile `promo-styles/<product>.json`. Image instead: `$P extract <folder> <image> [--logo]`.
+  Read `content.json` (small) for real copy and numbers. Never invent stats or quotes.
+- Files from the user: `$P import <folder> <file> --name <slug>`.
+- No brand yet, or they want a new look: `$P design "<what the product is>"` prints three
+  directions (UI UX Pro Max data). They pick; `$P design "<query>" --write N --name <slug> --brief <promo.json>`.
 
-- One idea per scene. Headline ≤ 8 words; mark one key word as `*word*` for the brand highlight.
-- Voiceover budget ≈ 2.6 words per second. 30 s ≈ 6-7 scenes, 60 s ≈ 10-12.
-- Story: hook (logo or headline) → problem/benefit → product in action (device, click, split) →
-  proof (stat, features) → CTA. Show the real product: prefer captured screens over text scenes.
-- Use the product's real numbers and copy from `brand/content.json` or the user. Never invent stats.
-- Keep the default transition; use `push-up` only for a conclusion and `zoom` for diving deeper.
+## 2. Direction
 
-## Cheap checks
+Then ask only what is still unknown, in one round: audience and the one message, length,
+formats, voice (female/male/none), and the **format of the film**. Offer 2–3 storylines that fit
+this product, not a fixed template, for example:
 
-- `$P still <storyboard> --at <seconds> [--format 9x16]`: one 960px frame. Look only if needed.
-- `$P preview <storyboard>`: 6-frame contact sheet of a rendered video.
-- On failure read only the printed error, or `tail -5 <folder>/work/render.log`.
+- Launch film (Apple/Linear): hook, tension, reveal of the real product, proof, claim, end card.
+- Screen Studio demo: mostly recorded flow, camera zooms into each action, light captions.
+- Fast social ad (9x16): 1–2 s cuts, kinetic type, product in the first 2 s.
+- Explainer: problem, how it works in 3 beats, outcome.
+
+Each storyline must differ in structure and pacing. Write a 5–8 line beat sheet and get a yes.
+
+## 3. Real footage
+
+- Web: write `flows` in `promo.json` (steps: `goto, wait, click, hover, type, press, scroll, pause`),
+  then `$P record-web <promo.json> [--flow name]`. 60 fps, 2× DPR, cookie banners hidden.
+  Use exact selectors: `role=tab[name="Pricing"]`, `text="Sign up"` (quoted = exact), ids.
+  Unquoted `text=Foo` matches substrings and can click the wrong element.
+- Then `$P screen <promo.json> assets/recordings/<flow>.mp4 --formats 16x9,9x16` turns it into
+  an edited block: idle speed ramps, camera zooms to clicks and typing, pull-back on navigation,
+  smoothed cursor and ripples. It prints a mount snippet. 9x16 with captions: `--fit 0.7 --lift 18`.
+- Mobile/desktop: `$P record <promo.json> ios|android|mac --seconds N --name x`.
+- Behind a login: prefer `$P login <url>` (they log in themselves; cookies stay local) and
+  `"site": {"login": "session"}`. Otherwise `${secret:name}` in a `type` step; the value is
+  asked in a local popup and typed as dots.
+
+## 4. Compose
+
+- `$P scaffold <promo.json>` creates one HyperFrames project per format with brand tokens
+  (`--ground --ink --accent --accent-2 --muted --font-display`) and `assets/` linked.
+- Write `script/vo.json` (`[{"id": "hook", "text": "..."}]`, ~2.6 words/s), then
+  `$P voice <promo.json> script/vo.json` (Kokoro, local) and `$P music <promo.json> --seconds <len>`.
+- Author `index.html` per format following the /hyperframes skill (clip contract, `data-start`,
+  `data-duration`, `window.__timelines`). Mount the screen blocks. Add VO `<audio>` clips with
+  `data-duration`, music with `data-volume="0.16"` and fades. Captions as clips.
+- Edit like an editor: matched direction and speed at cuts, no crossfades, stagger under 500 ms,
+  something moves in every shot, cursor causes the next action. Avoid three cards in a row and
+  titles over dimmed screenshots. 9x16 and 1x1 get their own layout, not a scaled 16x9.
+- Sound effects only from sources with a verified license.
+
+## 5. Check and render
+
+- `$HF lint` and `$HF check --json` (read-only, no popup). Fix errors; warnings are optional.
+- `$HF snapshot --at 2,9,15` for a few stills only when layout is in doubt.
+- `$P render <promo.json> --quality draft` first (run in background), share paths, then
+  `--quality delivery`. Render verifies an audio track, normalises to −14 LUFS and writes
+  `manifest.json` with SHA-256 hashes. Outputs: `master_16x9.mp4`, `vertical_9x16.mp4`, `square_1x1.mp4`.
+- On failure read only the printed error, or `~/.basivo-promo/last-error.log`.
 
 ## Security (non-negotiable)
 
-- Secrets only as `${secret:name}`. If the user pastes one, tell them to remove it; never repeat it.
-- Never read `~/.basivo-promo/sessions`, print `PROMO_SECRET_*`, or query the keychain (the hook denies it).
-- `capture.mask` must cover customer names, emails and anything private on screen.
+- Never ask for a password, token or code in chat. Secrets only as `${secret:name}`. If the user
+  pastes one, tell them to remove it and never repeat it.
+- Never read `~/.basivo-promo/sessions`, print `PROMO_SECRET_*` or query the keychain (denied).
+- `site.mask` must cover customer names, emails and anything private on screen.
+- `$HF publish`, `cloud`, `lambda` upload the project: only when the user explicitly asks.
 
-## References (read only when needed)
-
-- references/storyboard.md: every field and scene type.
-- references/motion.md: the motion rules the templates follow (for explaining choices).
-- references/styles.md: style files and how users make their own.
+Style profiles: references/styles.md. Build a personal style: /promo-style.

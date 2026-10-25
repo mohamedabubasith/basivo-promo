@@ -1,4 +1,4 @@
-"""Capture crisp screenshots of a web app by following the storyboard's capture steps."""
+"""Capture crisp screenshots of a web app by following the shots steps in promo.json."""
 import json
 import os
 import platform
@@ -7,10 +7,10 @@ import subprocess
 from pathlib import Path
 from urllib.parse import urljoin, urlparse
 
-from .browser import launch
+from .browser import CONSENT_JS, launch
 from .paths import SESSIONS, PromoError, private_dir
 from .secrets import Secrets
-from .storyboard import SECRET_REF
+from .brief import SECRET_REF
 
 HIDE_SCROLLBARS = "*::-webkit-scrollbar{display:none!important}*{scrollbar-width:none!important}"
 
@@ -43,12 +43,12 @@ def _same_site(a, b):
     return pa.scheme == pb.scheme and pa.hostname == pb.hostname
 
 
-def capture(sb, sb_path, log=print):
+def capture(brief, brief_path, log=print):
     from playwright.sync_api import TimeoutError as PWTimeout
     from playwright.sync_api import sync_playwright
 
-    cap = sb["capture"]
-    base = Path(sb_path).resolve().parent
+    cap = {**brief["site"], **brief["shots"]}
+    base = Path(brief_path).resolve().parent
     start = resolve_url(cap, base)
     secrets = Secrets(purpose=f"capturing {urlparse(start).hostname or 'the local app'}")
     state = None
@@ -63,10 +63,11 @@ def capture(sb, sb_path, log=print):
             for vp in cap["viewports"]:
                 ctx = browser.new_context(**_viewport(p, vp), storage_state=str(state) if state else None,
                                           reduced_motion="no-preference", color_scheme="light")
+                ctx.add_init_script(CONSENT_JS)
                 ctx.set_default_timeout(15000)
                 page = ctx.new_page()
                 masked = list(cap["mask"])
-                outdir = base / "captures" / vp
+                outdir = base / "assets" / "captures" / vp
                 outdir.mkdir(parents=True, exist_ok=True)
 
                 def shoot(name, full=False, point=None):
@@ -112,8 +113,8 @@ def capture(sb, sb_path, log=print):
                             loc.click()
                         elif "hover" in st:
                             page.locator(st["hover"]).first.hover()
-                        elif "fill" in st:
-                            sel, value = st["fill"]
+                        elif "fill" in st or "type" in st:
+                            sel, value = st.get("fill") or st.get("type")
                             loc = page.locator(sel).first
                             m = SECRET_REF.match(value)
                             if m:
@@ -146,7 +147,7 @@ def capture(sb, sb_path, log=print):
                 log(f"{vp}: done")
         finally:
             browser.close()
-    caps_path = base / "captures.json"
+    caps_path = base / "assets" / "captures" / "captures.json"
     old = json.loads(caps_path.read_text(encoding="utf-8")) if caps_path.is_file() else {}
     old.update(result)
     caps_path.write_text(json.dumps(old, indent=2), encoding="utf-8")
@@ -156,7 +157,7 @@ def capture(sb, sb_path, log=print):
 def _describe(st):
     k = next(iter(st))
     v = st[k]
-    if k == "fill":
+    if k in ("fill", "type"):
         return f"{v[0]} <- {'secret' if SECRET_REF.match(v[1]) else 'text'}"
     return str(v)[:80]
 

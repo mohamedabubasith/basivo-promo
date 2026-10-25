@@ -1,6 +1,6 @@
 # BP-007 Popup gate hook, secret prompt guard, audit log
 
-Status: todo
+Status: done (v0.2.0)
 
 ## Tasks
 - [ ] `hooks/gate.py` PreToolUse on Bash: any `promo.py` call returns `ask` with a plain description (URL, pages, output path).

@@ -1,11 +1,33 @@
 {
   "name": "playful",
   "description": "Friendly consumer-app look. Soft lilac canvas, purple and orange, quick springy motion, playful music.",
-  "brand": {"bg": "#fbf5ff", "fg": "#1f1235", "accent": "#9333ea", "accent2": "#f97316", "muted": "#6b5b80", "font": "Inter", "personality": "playful"},
-  "voice": {"engine": "kokoro", "voice": "af_bella", "speed": 1.05},
-  "music": {"style": "playful", "seed": 3, "volume": 0.55},
-  "captions": {"burn": true},
+  "brand": {
+    "bg": "#fbf5ff",
+    "fg": "#1f1235",
+    "accent": "#9333ea",
+    "accent2": "#f97316",
+    "muted": "#6b5b80",
+    "font": "Inter",
+    "personality": "playful"
+  },
+  "voice": {
+    "engine": "kokoro",
+    "voice": "af_bella",
+    "speed": 1.05
+  },
+  "music": {
+    "style": "playful",
+    "seed": 3,
+    "volume": 0.55
+  },
+  "captions": {
+    "burn": true
+  },
   "transition": "push-left",
-  "look": {"backdrop": "grid", "cursor": "dark"},
-  "sfx": true
+  "look": {
+    "backdrop": "grid",
+    "cursor": "dark"
+  },
+  "sfx": true,
+  "direction": "Friendly consumer app. Springy pops with small overshoot, rounded shapes, bright accents, cheerful sound effects."
 }

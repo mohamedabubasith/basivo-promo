@@ -1,6 +1,6 @@
 # BP-010 (parent) Adopt the user's own brand and content
 
-Status: doing
+Status: done (v0.2.0)
 
 Whatever the user gives (website URL, logged-in app, image, logo, video, brand kit), use it
 first and ask only for what is missing.

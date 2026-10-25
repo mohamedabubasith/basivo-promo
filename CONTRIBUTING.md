@@ -1,15 +1,13 @@
 # Contributing
 
-1. Fork, branch, and keep pull requests focused on one change.
-2. Run the unit tests (standard library only): `python3 -m unittest discover -s tests`.
-3. For anything visual, render the example and attach a frame or two:
-   ```text
-   PROMO_SECRET_DEMO_PASSWORD=demo scripts/promo capture examples/acme/storyboard.json
-   scripts/promo render examples/acme/storyboard.json --draft
-   scripts/promo preview examples/acme/storyboard.json
+1. Install the requirements from the README (uv, Node 22+, ffmpeg, Chrome).
+2. Run the tests: `python3 -m unittest discover -s tests` (standard library only, no network).
+3. Try a change end to end on any public site:
+   ```sh
+   scripts/promo new Demo --url https://example.com --length 20
+   scripts/promo extract promos/demo/<date>-launch https://example.com
+   scripts/promo record-web promos/demo/<date>-launch/promo.json
    ```
-4. New scene types go in `templates/runtime.js` (builder), `templates/stage.css` (layout for all
-   three formats) and `scripts/promo_core/storyboard.py` (`SCENES` and validation), with a line in
-   `skills/promo/references/storyboard.md`. Follow `skills/promo/references/motion.md`.
-5. Never add a code path that prints, logs or stores a secret value. Tests in
-   `tests/test_core.py` cover the resolver and the hooks; extend them.
+4. Keep hooks, and the `promo_core` modules they import, free of third-party imports.
+5. Security changes (gate, secrets, masking) need a test in `tests/test_core.py`.
+6. Open a pull request with what changed and how you checked it. Generated videos stay out of git.

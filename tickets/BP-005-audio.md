@@ -1,6 +1,6 @@
 # BP-005 Voiceover timing, music, mix, captions
 
-Status: todo
+Status: done (v0.2.0)
 
 ## Tasks
 - [ ] `promo.py tts`: one WAV per scene line, durations into the storyboard.

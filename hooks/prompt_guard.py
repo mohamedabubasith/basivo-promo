@@ -17,7 +17,7 @@ PEM = re.compile(r"-----BEGIN (?:RSA |EC |OPENSSH |DSA |ENCRYPTED )?PRIVATE KEY-
 
 
 def found(prompt):
-    from promo_core.storyboard import SECRET_KV, SECRET_TAGS
+    from promo_core.brief import SECRET_KV, SECRET_TAGS
     from promo_core.mask_pii import mask
 
     kinds = set()
@@ -45,7 +45,7 @@ def main():
         print(json.dumps({"decision": "block", "reason":
             f"basivo-promo stopped this message because it looks like it contains a secret ({', '.join(kinds)}). "
             "It was NOT sent to Claude. Remove the secret and resend. For logins, use ${secret:name} in the "
-            "storyboard: promo asks for the value in a local popup (or reads PROMO_SECRET_NAME / your keychain). "
+            "promo.json: promo asks for the value in a local popup (or reads PROMO_SECRET_NAME / your keychain). "
             "To turn this check off, set BASIVO_PROMO_PROMPT_GUARD=0."}))
 
 

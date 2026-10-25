@@ -18,6 +18,9 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "scripts"))
 
 PROMO = re.compile(r"(?:^|[\s;&|(\"'/])(?:scripts/promo(?:\.py)?|promo\.py)(?=$|[\s\"'])")
+HF_WRAPPER = re.compile(r"(?:^|[\s;&|(\"'/])scripts/hf(?=$|[\s\"'])")
+# Unpinned HyperFrames runs telemetry and may install skills; basivo-promo always goes through scripts/hf.
+HF_RAW = re.compile(r"(?:^|[\s;&|(])(?:npx|bunx|pnpm\s+dlx|yarn\s+dlx)\s+(?:-y\s+|--yes\s+)?hyperframes\b|(?:^|[\s;&|(])hyperframes\s+\w")
 PRIVATE_PATH = re.compile(r"\.basivo-promo/sessions")
 SECRET_READ = re.compile(r"find-generic-password[^|;&]*basivo-promo|secret-tool\s+lookup[^|;&]*basivo-promo|PROMO_SECRET_", re.I)
 # Dumping the whole environment is only blocked when promo secrets are actually set in it.
@@ -31,22 +34,27 @@ def out(decision, reason):
     sys.exit(0)
 
 
-def promo_args(command):
-    """Words after the promo executable, or None if this is not a promo call."""
-    if not PROMO.search(command):
-        return None
+def _after(command, exe_pattern):
+    """Words after the first word matching exe_pattern, up to the next shell operator."""
     try:
         words = shlex.split(command)
     except ValueError:
         return []
     for i, w in enumerate(words):
-        if re.search(r"(?:^|/)(?:scripts/)?promo(?:\.py)?$", w) and ("promo.py" in w or w.endswith("scripts/promo")):
+        if re.search(exe_pattern, w):
             rest = words[i + 1:]
-            for j, r in enumerate(rest):  # stop at the next shell operator
+            for j, r in enumerate(rest):
                 if r in ("&&", "||", ";", "|", "&"):
                     return rest[:j]
             return rest
     return []
+
+
+def promo_args(command):
+    """Words after the promo executable, or None if this is not a promo call."""
+    if not PROMO.search(command):
+        return None
+    return _after(command, r"(?:^|/)(?:scripts/promo|promo\.py)$")
 
 
 def main():
@@ -72,6 +80,20 @@ def main():
     if SECRET_READ.search(command) or (has_secret_env and ENV_DUMP.search(command)):
         out("deny", "basivo-promo: this command could print a secret (keychain entry, PROMO_SECRET_* variable or the "
                     "whole environment). Secrets stay out of the conversation; promo reads them itself when it needs them.")
+    if HF_RAW.search(command) or (re.search(r"\bnpm\s+run\s+(render|dev|check|publish)\b", command)
+                                  and (Path(cwd) / "hyperframes.json").is_file()):
+        out("deny", "basivo-promo: run HyperFrames through \"${CLAUDE_PLUGIN_ROOT}/scripts/hf\" (pinned version, telemetry "
+                    "off, no silent skill installs), not npx or npm run.")
+    if HF_WRAPPER.search(command):
+        words = _after(command, r"(?:^|/)scripts/hf$")
+        try:
+            from promo_core.summary import describe_hf
+            decision, title, lines = describe_hf(words or [])
+        except Exception:
+            decision, title, lines = "ask", "HyperFrames", ["Run a HyperFrames command. (Could not summarise it.)"]
+        if decision == "allow":
+            return
+        out("ask", f"{title}\n" + "\n".join(f"• {l}" for l in lines))
     args = promo_args(command)
     if args is None:
         return

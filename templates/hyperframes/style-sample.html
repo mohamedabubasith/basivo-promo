@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en" data-resolution="landscape">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      /* basivo-promo style sample: shows a taste profile's palette, type and pace in 10 s. */
+      :root { __TOKENS__ }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1920px; height: 1080px; overflow: hidden; background: var(--ground); }
+      #root { position: relative; width: 100%; height: 100%; overflow: hidden; font-family: var(--font-display); color: var(--ink); }
+      .glow { position: absolute; width: 1300px; height: 1300px; border-radius: 50%; filter: blur(140px); opacity: 0.38; }
+      #glow-a { left: -380px; top: -520px; background: var(--accent); }
+      #glow-b { right: -420px; bottom: -560px; background: var(--accent-2); }
+      .scene { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 28px; }
+      .eyebrow { font-size: 26px; font-weight: 650; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent); }
+      .headline { font-size: 128px; font-weight: 780; letter-spacing: -0.045em; line-height: 1; text-align: center; }
+      .headline span { display: inline-block; }
+      .hl { background: linear-gradient(100deg, var(--accent), var(--accent-2)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+      .rule { width: 220px; height: 8px; border-radius: 8px; background: linear-gradient(90deg, var(--accent), var(--accent-2)); transform-origin: 0 50%; }
+      .stat { font-size: 300px; font-weight: 820; letter-spacing: -0.06em; line-height: 0.9; font-variant-numeric: tabular-nums; }
+      .label { font-size: 44px; font-weight: 500; color: var(--muted); }
+      .mark { width: 170px; height: 170px; border-radius: 44px; display: grid; place-items: center; font-size: 96px; font-weight: 800; color: #fff;
+        background: linear-gradient(135deg, var(--accent), var(--accent-2)); }
+      .cta { padding: 30px 64px; border-radius: 999px; font-size: 44px; font-weight: 700; color: #fff;
+        background: linear-gradient(100deg, var(--accent), var(--accent-2)); box-shadow: 0 24px 60px rgba(0, 0, 0, 0.3); }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="10" data-width="1920" data-height="1080">
+      <div id="glow-a" class="glow clip" data-start="0" data-duration="10" data-track-index="0"></div>
+      <div id="glow-b" class="glow clip" data-start="0" data-duration="10" data-track-index="0"></div>
+
+      <div id="s1" class="scene clip" data-start="0" data-duration="3.6" data-track-index="1">
+        <div id="s1-in" class="scene">
+          <div class="eyebrow" id="eyebrow">Style preview</div>
+          <h1 class="headline" id="headline"><span>Ship</span> <span>your</span> <span class="hl">story</span></h1>
+          <div class="rule" id="rule1"></div>
+        </div>
+      </div>
+
+      <div id="s2" class="scene clip" data-start="3.3" data-duration="3.5" data-track-index="2">
+        <div id="s2-in" class="scene">
+          <div class="stat" id="stat">0.0x</div>
+          <div class="label" id="label">faster from idea to launch</div>
+        </div>
+      </div>
+
+      <div id="s3" class="scene clip" data-start="6.5" data-duration="3.5" data-track-index="3">
+        <div id="s3-in" class="scene">
+          <div class="mark" id="mark">__PRODUCT__</div>
+          <div class="cta" id="cta">Get started</div>
+        </div>
+      </div>
+    </div>
+    <script>
+      const P = __PACE__; // taste profile pace: premium is slower, energetic faster
+      const tl = gsap.timeline({ paused: true });
+      // Matched-vector cut at time T: the old scene accelerates out to the left and is gone by T;
+      // the new one enters from the right already moving and settles. Overlap stays short.
+      const cut = (from, to, T) => {
+        tl.to(from, { xPercent: -55, duration: 0.42, ease: "power3.in" }, T - 0.42);
+        tl.to(from, { opacity: 0, filter: "blur(10px)", duration: 0.22, ease: "power1.in" }, T - 0.22);
+        tl.from(to, { xPercent: 55, opacity: 0, filter: "blur(10px)", duration: 0.55, ease: "power3.out" }, T - 0.06);
+      };
+      const mark = document.getElementById("mark");
+      mark.textContent = mark.textContent.trim().charAt(0).toUpperCase();
+
+      tl.to("#glow-a", { x: 260, y: 160, scale: 1.15, duration: 10, ease: "sine.inOut" }, 0);
+      tl.to("#glow-b", { x: -220, y: -140, scale: 0.92, duration: 10, ease: "sine.inOut" }, 0);
+
+      // Scene 1: words rise out of a blur, one after another; the rule sweeps under them.
+      tl.from("#eyebrow", { y: 24, opacity: 0, duration: 0.5 * P, ease: "power3.out" }, 0.15);
+      tl.from("#headline span", { yPercent: 70, opacity: 0, filter: "blur(14px)", duration: 0.8 * P, ease: "expo.out", stagger: 0.09 * P }, 0.3);
+      tl.from("#rule1", { scaleX: 0, duration: 0.8 * P, ease: "expo.out" }, 0.9);
+      tl.to("#s1-in", { scale: 1.04, duration: 3.6, ease: "none" }, 0);
+      // Cut 1: leaves left, accelerating; scene 2 arrives already moving (matched vector).
+      cut("#s1-in", "#s2-in", 3.4);
+
+      // Scene 2: the number counts up and lands.
+      const n = { v: 0 }, stat = document.getElementById("stat");
+      tl.to(n, { v: 3.4, duration: 1.4 * P, ease: "expo.out", onUpdate: () => { stat.textContent = n.v.toFixed(1) + "x"; } }, 3.4);
+      tl.from("#label", { y: 30, opacity: 0, duration: 0.6 * P, ease: "power3.out" }, 3.9);
+      // Cut 2: same direction, same speed.
+      cut("#s2-in", "#s3-in", 6.6);
+
+      // Scene 3: the mark lands with a small overshoot, then the call to action is pressed.
+      tl.from("#mark", { scale: 0.5, rotate: -8, duration: 0.9 * P, ease: "back.out(1.6)" }, 6.6);
+      tl.from("#cta", { y: 40, opacity: 0, duration: 0.6 * P, ease: "power3.out" }, 7.2);
+      tl.to("#cta", { scale: 0.94, duration: 0.09, ease: "power2.in" }, 8.4);
+      tl.to("#cta", { scale: 1, duration: 0.4, ease: "back.out(3)" }, 8.49);
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>

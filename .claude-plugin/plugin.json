@@ -1,7 +1,7 @@
 {
   "name": "basivo-promo",
-  "version": "0.1.0",
-  "description": "Make production-ready, animated promo videos of your web, mobile and desktop apps for sales teams. Template-driven motion, local voiceover, generated music. Every action confirmed in a popup; credentials never reach the model.",
+  "version": "0.2.0",
+  "description": "Promo, launch and demo films of your web, mobile and desktop apps, edited like Screen Studio and rendered with HyperFrames. Adopts your brand from a URL, records real flows, local voiceover and music. Every action confirmed in a popup; credentials never reach the model.",
   "author": {
     "name": "Basivo",
     "url": "https://basivo.in"
@@ -14,6 +14,7 @@
     "promo",
     "sales",
     "motion-graphics",
+    "hyperframes",
     "tts",
     "playwright",
     "human-in-the-loop"

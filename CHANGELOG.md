@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.2.0 (2026-10-25)
+
+Rebuilt on HyperFrames: films are composed per request instead of filled into fixed templates.
+
+- `record-web`: real flows recorded at 60 fps and 2x DPR with a cursor, click, typing, scroll
+  and navigation event log; masks survive in-app navigation; cookie banners hidden.
+- `screen`: Screen Studio-style edit of a recording: idle speed ramps, camera zooms to clicks
+  and typing, pull-back on navigation, smoothed cursor, ripples, touch dots on mobile.
+- `scaffold`, `voice`, `music`, `render` on HyperFrames 0.8.198 (pinned, telemetry off);
+  render checks for an audio track, normalises to -14 LUFS and writes `manifest.json`.
+- `design`: three design directions from UI UX Pro Max data, saved as taste profiles.
+- `extract`: monochrome brands keep their real accent; cookie banners no longer appear in screens.
+- Gate: read-only HyperFrames commands allowed, writing ones prompt, uploads warn, raw npx denied.
+- Removed: the v0.1 scene runtime, storyboard format and bundled example project.
+
 ## 0.1.0 (2026-10-25)
 
 First public release.

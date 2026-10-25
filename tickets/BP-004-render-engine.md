@@ -1,6 +1,6 @@
 # BP-004 Render engine + first 3 templates + manifest
 
-Status: todo
+Status: replaced by BP-012 (HyperFrames)
 
 ## Tasks
 - [ ] `scripts/promo.py render <storyboard.json>`; prints at most 5 lines.

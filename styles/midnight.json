@@ -1,11 +1,33 @@
 {
   "name": "midnight",
   "description": "Dark, calm and premium. Violet-to-pink accents, aurora light, cinematic score. The default.",
-  "brand": {"bg": "#0b0d12", "fg": "#ffffff", "accent": "#6c5cff", "accent2": "#ff5c8a", "muted": "#9aa3b2", "font": "Inter", "personality": "corporate"},
-  "voice": {"engine": "kokoro", "voice": "am_michael", "speed": 1.0},
-  "music": {"style": "cinematic", "seed": 7, "volume": 0.5},
-  "captions": {"burn": true},
+  "brand": {
+    "bg": "#0b0d12",
+    "fg": "#ffffff",
+    "accent": "#6c5cff",
+    "accent2": "#ff5c8a",
+    "muted": "#9aa3b2",
+    "font": "Inter",
+    "personality": "corporate"
+  },
+  "voice": {
+    "engine": "kokoro",
+    "voice": "am_michael",
+    "speed": 1.0
+  },
+  "music": {
+    "style": "cinematic",
+    "seed": 7,
+    "volume": 0.5
+  },
+  "captions": {
+    "burn": true
+  },
   "transition": "push-left",
-  "look": {"backdrop": "aurora", "cursor": "light"},
-  "sfx": true
+  "look": {
+    "backdrop": "aurora",
+    "cursor": "light"
+  },
+  "sfx": true,
+  "direction": "Dark, premium and calm. Long readable holds, slow push-ins, matched horizontal cuts, glowing accents. No bounce."
 }
