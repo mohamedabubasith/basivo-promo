@@ -60,7 +60,7 @@ Each storyline must differ in structure and pacing. Write a 5–8 line beat shee
 - Write `script/vo.json` (`[{"id": "hook", "text": "..."}]`, ~2.6 words/s), then
   `$P voice <promo.json> script/vo.json` (Kokoro, local) and `$P music <promo.json> --seconds <len>`.
 - Author `index.html` per format following the /hyperframes skill (clip contract, `data-start`,
-  `data-duration`, `window.__timelines`). Mount the screen blocks. Add VO `<audio>` clips with
+  `data-duration`, `window.__timelines`). Mount the screen blocks. Add VO `<audio>` clips (each needs a unique `id`, or it renders silent) with
   `data-duration`, music with `data-volume="0.16"` and fades. Captions as clips.
 - Edit like an editor: matched direction and speed at cuts, no crossfades, stagger under 500 ms,
   something moves in every shot, cursor causes the next action. Avoid three cards in a row and

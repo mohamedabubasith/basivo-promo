@@ -25,10 +25,10 @@ with a local voiceover, generated music and captions in 16:9, 9:16 and 1:1.
 
 ## Demo
 
-[![30-second demo film made with basivo-promo](docs/demo/elevenlabs-demo.jpg)](docs/demo/elevenlabs-demo.mp4)
+[![60-second demo film made with basivo-promo](docs/demo/elevenlabs-demo.jpg)](docs/demo/elevenlabs-demo.mp4)
 
-[Watch the 30-second film (MP4, with voice and music)](docs/demo/elevenlabs-demo.mp4). Made
-end to end by the plugin from `https://elevenlabs.io`: brand extracted, a real flow recorded
+[Watch the 60-second film (MP4, female voiceover and music)](docs/demo/elevenlabs-demo.mp4). Made
+end to end by the plugin from `https://elevenlabs.io`: brand extracted, two real flows recorded
 and edited (camera zooms to each click), Kokoro voiceover, ditty music, rendered on HyperFrames.
 Unofficial demo; not affiliated with ElevenLabs. Trademarks belong to their owners.
 
