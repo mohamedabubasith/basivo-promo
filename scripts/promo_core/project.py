@@ -10,7 +10,7 @@ from pathlib import Path
 
 from . import __version__, ff
 from .brief import FORMATS
-from .fonts import font_face_css
+from .fonts import BUNDLED, font_face_css
 from .paths import PLUGIN_ROOT, PromoError
 
 HF = PLUGIN_ROOT / "scripts" / "hf"
@@ -74,9 +74,12 @@ def scaffold(brief, folder, formats=None):
             hf(["init", fmt, "--example", "blank", "--resolution", FORMATS[fmt]["resolution"], "--non-interactive"], folder,
                f"creating the {fmt} project")
             tokens = _tokens(brief, folder)
-            _apply_tokens(proj / "index.html", tokens)
             family = tokens["--font-display"].split(",")[0].strip().strip('"')
             faces = font_face_css(family, shared)
+            if not faces and family.lower() not in BUNDLED:
+                # Proprietary or unknown brand font: the renderer cannot load it, so say Inter honestly.
+                tokens["--font-display"] = '"Inter", sans-serif'
+            _apply_tokens(proj / "index.html", tokens)
             if faces:  # a brand font HyperFrames does not bundle: ship the files with the project
                 idx = proj / "index.html"
                 idx.write_text(idx.read_text(encoding="utf-8").replace("<style>", "<style>\n" + faces, 1), encoding="utf-8")
