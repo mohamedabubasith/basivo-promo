@@ -1,0 +1,49 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  html, body { margin: 0; width: 1920px; height: 1080px; overflow: hidden; background: #0b0d12; font-family: -apple-system, "Inter", sans-serif; }
+  .bg { position: absolute; inset: -20%; background: radial-gradient(circle at 30% 30%, #2b3cff55, transparent 50%), radial-gradient(circle at 70% 70%, #ff2bd655, transparent 50%);
+        animation: drift 10s linear both; }
+  @keyframes drift { to { transform: rotate(25deg) scale(1.1); } }
+
+  h1 { position: absolute; top: 120px; width: 100%; text-align: center; margin: 0; color: #fff; font-size: 96px; font-weight: 800; letter-spacing: -2px; }
+  h1 span { display: inline-block; opacity: 0; animation: rise 0.9s linear(0, 0.36 12%, 0.98 30%, 1.08 40%, 1.01 55%, 1) both; }
+  @keyframes rise { from { opacity: 0; transform: translateY(80px) rotate(8deg); filter: blur(12px); } to { opacity: 1; transform: none; filter: blur(0); } }
+
+  .device { position: absolute; left: 50%; top: 330px; width: 1200px; height: 700px; margin-left: -600px; border-radius: 22px; overflow: hidden;
+            background: #1a1d26; box-shadow: 0 60px 120px #0009, 0 0 0 1px #ffffff22;
+            animation: enter 1.2s cubic-bezier(.2,.9,.2,1) 1.2s both, push 6s ease-in-out 2.4s both; transform-origin: 50% 30%; }
+  .bar { height: 40px; background: #242836; display: flex; gap: 8px; align-items: center; padding-left: 16px; }
+  .bar i { width: 12px; height: 12px; border-radius: 50%; background: #ff5f57; } .bar i + i { background: #febc2e; } .bar i + i + i { background: #28c840; }
+  video { width: 100%; height: 660px; object-fit: cover; display: block; }
+  @keyframes enter { from { opacity: 0; transform: translateY(400px) rotateX(25deg) scale(.85); } to { opacity: 1; transform: none; } }
+  @keyframes push { to { transform: scale(1.35) translateY(-60px); } }
+</style>
+</head>
+<body>
+<div class="bg"></div>
+<h1 id="h"></h1>
+<div class="device"><div class="bar"><i></i><i></i><i></i></div><video id="v" src="clip.mp4" muted preload="auto"></video></div>
+<script>
+  // Split headline into letters with staggered delays.
+  const text = "Ship faster with Acme";
+  document.getElementById("h").innerHTML = [...text].map((c, i) =>
+    `<span style="animation-delay:${(0.2 + i * 0.035).toFixed(3)}s">${c === " " ? "&nbsp;" : c}</span>`).join("");
+
+  const video = document.getElementById("v");
+  const VIDEO_START = 2.4; // clip starts playing when the push-in starts
+
+  // Deterministic seek: pause every animation and set its time; sync the video.
+  window.seek = async (t) => {
+    for (const a of document.getAnimations()) { a.pause(); a.currentTime = t * 1000; }
+    const vt = Math.max(0, Math.min(t - VIDEO_START, (video.duration || 0) - 0.01));
+    if (Math.abs(video.currentTime - vt) > 1e-3) {
+      await new Promise(r => { video.addEventListener("seeked", r, { once: true }); video.currentTime = vt; });
+    }
+  };
+  window.ready = new Promise(r => video.readyState >= 2 ? r() : video.addEventListener("loadeddata", r, { once: true }));
+</script>
+</body>
+</html>

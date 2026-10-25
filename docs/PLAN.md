@@ -5,7 +5,7 @@
 
 ## Core idea (why it is cheap and looks professional)
 - **Claude writes only a small `storyboard.json` (~1–2k tokens).** It is a list of scenes: template, text, asset ref, motion preset. Claude never sees frames, video or audio. It sees only one-line results from the scripts.
-- **The motion lives in templates, not in model output.** HTML/CSS + GSAP scene templates on a paused timeline. A headless browser seeks the timeline frame by frame, takes screenshots and pipes them to ffmpeg. The render is deterministic, which is how editors get smooth easing, kinetic type, device mockups, push-ins, whip transitions and cursor zooms.
+- **The motion lives in templates, not in model output.** HTML/CSS scene templates whose animations the Web Animations API pauses and seeks (no GSAP: native, no licence issue). A headless browser seeks the timeline frame by frame, takes screenshots and pipes them to ffmpeg. The render is deterministic, which is how editors get smooth easing, kinetic type, device mockups, push-ins, whip transitions and cursor zooms.
 - **The voiceover sets the timing.** TTS runs first. Each scene lasts as long as its VO line plus padding, so the cuts land on the speech.
 
 ## Location and conventions (copied from existing plugins)
@@ -21,7 +21,7 @@ hooks/gate.py               # popup gate + secret guard (python3 stdlib)
 scripts/run                 # POSIX shim (copy of basivo-studio/scripts/run)
 scripts/promo.py             # one CLI: capture | tts | music | render | doctor
 scripts/mask_pii.py         # copy of basivo-operator/scripts/mask_pii.py
-templates/*.html + vendor/gsap.min.js (vendored, no CDN at render time)
+templates/*.html (no animation library)
 tests/test_promo.py
 ```
 Runtime: `promo.py` uses PEP 723 inline deps run with `uv run` (playwright, kokoro-onnx, soundfile). No venv setup. ffmpeg is required; `doctor` checks for it and for Chromium.
@@ -39,7 +39,7 @@ Runtime: `promo.py` uses PEP 723 inline deps run with `uv run` (playwright, koko
    - Prefer `loops: n` (gapless form boundaries) sized to be at least the video length. ffmpeg trims it and adds a 1.5 s `afade` out at the end card.
    - Fallback: the user drops a track in `~/.basivo-promo/music/`.
 4. **render**
-   - Load each template with the scene data. Seek frame `n` with `window.seek(n/fps)`; GSAP sets `timeline.seek` and embedded `<video>.currentTime`, then awaits `seeked`. Take a JPEG screenshot and pipe it to `ffmpeg -f image2pipe`.
+   - Load each template with the scene data. Seek frame `n` with `window.seek(n/fps)`; every CSS animation gets `currentTime`; embedded `<video>.currentTime`, then awaits `seeked`. Take a JPEG screenshot and pipe it to `ffmpeg -f image2pipe`.
    - Audio: VO plus music, with `sidechaincompress` ducking and `loudnorm` to −14 LUFS.
    - Captions come from VO text and durations, as `.srt` plus an optional burned-in style.
    - Outputs: 16:9 master, 9:16 and 1:1 re-layouts (templates are responsive; not a crop).
@@ -72,7 +72,7 @@ Templates v1 (8): logo sting, kinetic headline, device mockup (browser/phone/lap
 - `.gitignore` covers `clips/` and `audio/` by default. Masters are kept.
 
 ## Build order
-1. Spikes (half a day each): (a) GSAP seek → ffmpeg at 1080p30 render speed, (b) ditty `renderOffline` in headless Chromium → WAV, (c) Kokoro int8 quality and speed.
+1. Spikes (half a day each): (a) seek → ffmpeg at 1080p30 render speed, (b) ditty `renderOffline` in headless Chromium → WAV, (c) Kokoro int8 quality and speed.
 2. `promo.py render` + 3 templates on a handwritten storyboard.
 3. `tts` + VO-driven timing + audio mix + captions.
 4. `capture` (web) + secret resolver + login handover.
