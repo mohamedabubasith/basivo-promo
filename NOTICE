@@ -1,0 +1,27 @@
+basivo-promo
+Copyright (c) 2026 Basivo. Licensed under the MIT License (see LICENSE).
+
+This repository bundles the following third-party files:
+
+1. vendor/ditty.global.js
+   @simpllyf/ditty 0.6.0, https://github.com/simpllyf/ditty
+   MIT License, Copyright (c) Simpllyf. Full text: vendor/ditty.LICENSE
+   sha256 60f6cdb0b684de8bc44cdb32d7acc0802155580d4761c8ff9b0b93b4b8f23a48
+
+2. vendor/fonts/Inter-latin-wght.woff2, vendor/fonts/Inter-latin-ext-wght.woff2
+   Inter, by Rasmus Andersson, via @fontsource-variable/inter 5.3.0
+   SIL Open Font License 1.1. Full text: vendor/fonts/Inter.OFL.txt
+
+Downloaded at runtime by `promo setup` (not redistributed here):
+
+3. Kokoro-82M (int8 ONNX export by thewh1teagle/kokoro-onnx, model-files-v1.0)
+   https://huggingface.co/hexgrad/Kokoro-82M, Apache License 2.0
+   kokoro-v1.0.int8.onnx sha256 6e742170d309016e5891a994e1ce1559c702a2ccd0075e67ef7157974f6406cb
+   voices-v1.0.bin       sha256 bca610b8308e8d99f32e6fe4197e7ec01679264efed0cac9140fe9c29f1fbf7d
+
+Motion-design rules in skills/promo/references/motion.md and templates/runtime.js are adapted
+(not copied) from: LottieFiles/motion-design-skill (MIT), heygen-com/hyperframes skills
+(Apache-2.0), AbubakrChan/product-launch-motion (MIT).
+
+Python dependencies installed by uv (not bundled): playwright (Apache-2.0), kokoro-onnx (MIT),
+onnxruntime (MIT), numpy (BSD-3-Clause), soundfile (BSD-3-Clause).

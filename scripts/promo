@@ -1,0 +1,8 @@
+#!/bin/sh
+# basivo-promo CLI launcher. uv installs the pinned Python dependencies on first use.
+here=$(cd "$(dirname "$0")" && pwd)
+if command -v uv >/dev/null 2>&1; then
+  exec uv run --quiet --script "$here/promo.py" "$@"
+fi
+echo "basivo-promo: uv is required. Install it: https://docs.astral.sh/uv/getting-started/installation/" >&2
+exit 1

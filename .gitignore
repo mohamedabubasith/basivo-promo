@@ -7,3 +7,11 @@ node_modules/
 promos/
 *.storage.json
 .spikes/
+# Example outputs are generated, not committed
+examples/*/captures/
+examples/*/captures.json
+examples/*/work/
+examples/*/*.mp4
+examples/*/*.png
+examples/*/captions.srt
+examples/*/manifest.json

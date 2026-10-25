@@ -1,0 +1,38 @@
+{
+  "version": 1,
+  "product": "Acme Deploy",
+  "title": "launch",
+  "style": "midnight",
+  "formats": ["16x9", "9x16", "1x1"],
+  "capture": {
+    "url": "../demo-app/index.html",
+    "viewports": ["desktop", "mobile"],
+    "login": "none",
+    "mask": [".email"],
+    "steps": [
+      {"shot": "login"},
+      {"fill": ["#password", "${secret:demo_password}"]},
+      {"click": "#signin"},
+      {"wait": ".kpis"},
+      {"shot": "dashboard"},
+      {"click": "#deploy", "shot": "deploy"},
+      {"wait": "#toast"},
+      {"shot": "deployed"}
+    ]
+  },
+  "scenes": [
+    {"type": "logo", "vo": "Meet Acme Deploy."},
+    {"type": "headline", "eyebrow": "Release day, solved", "text": "Ship to production *in minutes*", "sub": "Every check automated. Every team in sync.", "vo": "Ship to production in minutes, with every check automated and every team in sync."},
+    {"type": "device", "media": "captures/desktop/dashboard.png", "frame": "laptop", "title": "One calm overview", "caption": "Deploys, checks and incidents at a glance.", "vo": "See every deploy, check and incident in one calm overview."},
+    {"type": "click", "media": "captures/desktop/deploy.png", "point": "auto", "label": "One-click deploy", "vo": "When you are ready, it is one click to production."},
+    {"type": "split", "before": "captures/desktop/deploy.png", "after": "captures/desktop/deployed.png", "labels": ["Click", "Live"], "title": "From click to live", "vo": "Acme runs the checks and tells you the moment it is live."},
+    {"type": "device", "media": "captures/mobile/dashboard.png", "frame": "phone", "title": "In your pocket", "caption": "The same view on your phone.", "vo": "And it fits in your pocket."},
+    {"type": "features", "title": "Built for busy teams", "items": [
+      {"icon": "⚡", "title": "Fast", "text": "Median deploy in 3.2 minutes"},
+      {"icon": "🛡", "title": "Safe", "text": "Automatic checks and rollbacks"},
+      {"icon": "👥", "title": "Shared", "text": "Everyone sees the same status"}
+    ], "vo": "Fast, safe, and shared by the whole team."},
+    {"type": "stat", "value": 99.98, "decimals": 2, "suffix": "%", "label": "deploy success rate", "vo": "With a ninety nine point nine eight percent success rate."},
+    {"type": "cta", "text": "Ship *calmly*", "button": "Start free", "url": "acme.dev", "vo": "Acme Deploy. Ship calmly. Start free today."}
+  ]
+}

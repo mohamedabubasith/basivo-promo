@@ -1,0 +1,11 @@
+{
+  "name": "editorial",
+  "description": "Warm paper tones, burnt-orange accent, slow upward reveals, dreamy score. Feels like a magazine.",
+  "brand": {"bg": "#f4efe6", "fg": "#1c1917", "accent": "#c2410c", "accent2": "#b45309", "muted": "#6b6259", "font": "Inter", "personality": "premium"},
+  "voice": {"engine": "kokoro", "voice": "bf_emma", "speed": 0.95},
+  "music": {"style": "dreamy", "seed": 5, "volume": 0.45},
+  "captions": {"burn": true},
+  "transition": "push-up",
+  "look": {"backdrop": "plain", "cursor": "dark"},
+  "sfx": true
+}

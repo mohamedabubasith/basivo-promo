@@ -1,0 +1,10 @@
+#!/bin/sh
+# Run a basivo-promo hook with whatever Python 3 this machine has. Hooks need only the standard library.
+here=$(dirname "$0")
+script="$1"; shift
+for p in python3 python "py -3"; do
+  if $p -c 'import sys; sys.exit(0 if sys.version_info >= (3, 9) else 1)' >/dev/null 2>&1; then
+    exec $p "$here/$script" "$@"
+  fi
+done
+exit 0
