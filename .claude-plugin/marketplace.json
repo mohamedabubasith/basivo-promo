@@ -1,0 +1,20 @@
+{
+  "name": "basivo-promo",
+  "owner": {
+    "name": "Basivo"
+  },
+  "metadata": {
+    "description": "Animated product promo videos for sales teams, made locally and securely.",
+    "version": "0.1.0"
+  },
+  "plugins": [
+    {
+      "name": "basivo-promo",
+      "source": "./",
+      "description": "Make production-ready, animated promo videos of your web, mobile and desktop apps. Template-driven motion, local voiceover, generated music, popup confirmation for every action, credentials never sent to the model.",
+      "version": "0.1.0",
+      "category": "media",
+      "keywords": ["video", "promo", "sales", "motion-graphics", "tts"]
+    }
+  ]
+}

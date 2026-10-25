@@ -1,0 +1,21 @@
+{
+  "name": "basivo-promo",
+  "version": "0.1.0",
+  "description": "Make production-ready, animated promo videos of your web, mobile and desktop apps for sales teams. Template-driven motion, local voiceover, generated music. Every action confirmed in a popup; credentials never reach the model.",
+  "author": {
+    "name": "Basivo",
+    "url": "https://basivo.in"
+  },
+  "homepage": "https://github.com/mohamedabubasith/basivo-promo",
+  "repository": "https://github.com/mohamedabubasith/basivo-promo",
+  "license": "MIT",
+  "keywords": [
+    "video",
+    "promo",
+    "sales",
+    "motion-graphics",
+    "tts",
+    "playwright",
+    "human-in-the-loop"
+  ]
+}
