@@ -367,6 +367,21 @@ def cmd_doctor(a):
     say(f"basivo-promo {__version__}: {'ready' if ok else 'fix the ERR lines above'}")
 
 
+# One line after each step so the person (and Claude) always sees what comes next.
+NEXT = {
+    "new": "adopt the brand (promo extract <folder> <url>) or pick a look (promo design)",
+    "extract": "agree the storyline, then write flows in promo.json and run promo record-web",
+    "design": "save a direction with --write N, then record the product",
+    "record-web": "edit each recording with promo screen <promo.json> <flow>",
+    "record": "edit or place the clip with promo screen / import",
+    "screen": "promo scaffold (once), then voice and music",
+    "scaffold": "promo screen for each recording, then promo voice and promo music",
+    "voice": "promo music --seconds <film length>, then compose index.html",
+    "music": "compose index.html, check it with hf check, then promo render --quality draft",
+    "render": "watch the MP4; change the composition and render again, or deliver",
+}
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser(prog="promo", description="basivo-promo: promo films of your apps, built on HyperFrames")
     ap.add_argument("--version", action="version", version=f"basivo-promo {__version__}")
@@ -412,6 +427,8 @@ def main(argv=None):
     fn = globals()["cmd_" + a.cmd.replace("-", "_")]
     try:
         fn(a)
+        if a.cmd in NEXT:
+            say(f"✓ done. Next: {NEXT[a.cmd]}")
         return 0
     except BriefError as e:
         say("promo.json problems:")

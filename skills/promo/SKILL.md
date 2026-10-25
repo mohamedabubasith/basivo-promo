@@ -12,6 +12,17 @@ the HyperFrames compositions. Do not look at frames or audio unless something ne
 HyperFrames, telemetry off). Never call `npx hyperframes` directly; the gate denies it. Every
 `$P` call and every writing `$HF` call opens a confirmation popup. That is expected.
 
+## Progress the user can see
+
+- At the start, create a task list (your todo/task tool) with these 8 steps and keep it current:
+  1 Set up · 2 Adopt your brand · 3 Record the product · 4 Edit the footage · 5 Build the project ·
+  6 Voice and music · 7 Compose the film · 8 Render.
+- Give every Bash call a short plain description of the step ("Record the product flows",
+  "Render the draft"), never the raw command. Popups already name the step ("Step 3 of 8").
+- Between steps write one short line: what finished, what is next. Each command ends with
+  `✓ done. Next: ...`; follow it unless the user said otherwise.
+- After a render, open the MP4 for the user (`open <file>` on macOS) and ask what to change.
+
 ## 1. Assets first
 
 In one AskUserQuestion, ask what they have: website or app URL, logo, images, screen

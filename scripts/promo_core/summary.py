@@ -71,8 +71,8 @@ def describe(args, cwd="."):
     if cmd == "render":
         fmts = (_opt(rest, "--formats") or ",".join((b or {}).get("formats") or ["16x9"])).split(",")
         return "Render video", [f"Render {', '.join(fmts)} with HyperFrames ({_opt(rest, '--quality') or 'delivery'} quality) in {folder}.",
-                                "Runs locally (headless Chrome + ffmpeg). Then checks the audio track and loudness and",
-                                "writes the MP4s and manifest.json next to promo.json. Nothing is uploaded."]
+                                "Runs locally (headless Chrome + ffmpeg), checks the audio track and loudness, writes the MP4s and manifest.json.",
+                                "Nothing is uploaded."]
     if cmd == "scaffold":
         return "Create HyperFrames projects", [f"Create one HyperFrames project per format in {folder} and apply the brand colours.",
                                                "Downloads the pinned HyperFrames CLI from npm on first use."]
@@ -121,6 +121,18 @@ def _common(b, steps, dest):
         lines.append(f"Blurred on screen: {', '.join(site['mask'][:6])}")
     lines.append(f"Saves into {dest}")
     return lines
+
+
+# The /promo workflow, so every popup says where the user is in it.
+STEPS = ["Set up", "Adopt your brand", "Record the product", "Edit the footage", "Build the project",
+         "Voice and music", "Compose the film", "Render"]
+STEP_OF = {"new": 1, "extract": 2, "design": 2, "login": 3, "capture": 3, "record-web": 3, "record": 3, "import": 3,
+           "screen": 4, "scaffold": 5, "voice": 6, "music": 6, "render": 8}
+
+
+def header(cmd, title):
+    n = STEP_OF.get(cmd)
+    return f"basivo-promo · Step {n} of {len(STEPS)} · {title}" if n else f"basivo-promo · {title}"
 
 
 def describe_hf(args):

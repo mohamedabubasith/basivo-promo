@@ -93,7 +93,7 @@ def main():
             decision, title, lines = "ask", "HyperFrames", ["Run a HyperFrames command. (Could not summarise it.)"]
         if decision == "allow":
             return
-        out("ask", f"{title}\n" + "\n".join(f"• {l}" for l in lines))
+        out("ask", _text(f"basivo-promo · {title}", lines, cwd))
     args = promo_args(command)
     if args is None:
         return
@@ -102,7 +102,20 @@ def main():
         title, lines = describe(args, cwd)
     except Exception:
         title, lines = "basivo-promo", ["Run a basivo-promo command. (Could not summarise it; check the command below.)"]
-    out("ask", f"{title}\n" + "\n".join(f"• {l}" for l in lines))
+    try:
+        from promo_core.summary import header
+        title = header(args[0] if args else "", title)
+    except Exception:
+        pass
+    out("ask", _text(title, lines, cwd))
+
+
+def _text(title, lines, cwd):
+    """Popup text: title, then one bullet per line, with paths shown relative to the project."""
+    body = "\n".join(f"• {l}" for l in lines)
+    if cwd and len(cwd) > 1:
+        body = body.replace(cwd.rstrip("/") + "/", "")
+    return f"{title}\n{body}"
 
 
 if __name__ == "__main__":
