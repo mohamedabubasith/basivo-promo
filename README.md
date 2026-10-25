@@ -32,6 +32,39 @@ end to end by the plugin from `https://elevenlabs.io`: brand extracted, two real
 and edited (camera zooms to each click), Kokoro voiceover, ditty music, rendered on HyperFrames.
 Unofficial demo; not affiliated with ElevenLabs. Trademarks belong to their owners.
 
+## Why basivo-promo
+
+### What it adds on top of HyperFrames
+
+[HyperFrames](https://github.com/heygen-com/hyperframes) is the engine: HTML + GSAP compositions
+rendered frame by frame to MP4. basivo-promo is the production layer a sales or marketing team
+needs around it.
+
+| | HyperFrames on its own | With basivo-promo |
+|---|---|---|
+| Product footage | You bring screenshots or clips | `record-web` drives the real app: clicks, typing, scrolling, logins, at 60 fps and 2× DPR, with an event log |
+| Editing footage | Hand-animate zooms and cursors | `screen` edits automatically from the event log: speed ramps over idle time, camera zooms to each click and keystroke, pull-backs on page changes, smoothed cursor, click ripples |
+| Brand | Set colours and fonts by hand | `extract` reads colours, font, logo, headings and stats from your site; `design` proposes three directions from UI UX Pro Max data |
+| Voice and music | `media-use` can call HeyGen services | Kokoro-82M voice and ditty music, both local and free; no account needed |
+| Credentials | Not in scope | `${secret:name}` from a local popup or keychain, typed as dots, never sent to the model; sessions saved with mode 600 |
+| Safety | Runs what it is told | Every command shows a step-by-step permission popup; uploads (`publish`, `cloud`, `lambda`) are flagged; pasted secrets are blocked; telemetry off |
+| Delivery | Renders an MP4 | Checks an audio track exists, normalises to −14 LUFS / −1.5 dBTP, writes `manifest.json` with SHA-256 hashes, 16:9 / 9:16 / 1:1 |
+| Reproducible | Latest version | Pinned HyperFrames version, so a project renders the same next month |
+| Workflow | Prompt and iterate | Assets first, storyline options to pick from, an 8-step checklist and a draft before the final |
+
+### Compared with other ways to make a product video
+
+- **Screen recorders** (Screen Studio, Loom): great auto-zoom, but you record by hand on one
+  machine and edit one video at a time. basivo-promo records from a script, so the flow is the
+  same every time and re-records in seconds when the UI changes.
+- **AI text-to-video generators**: fast, but they invent footage. Sales videos must show the
+  real product; basivo-promo only uses what it recorded or what you gave it.
+- **Code-based video frameworks** (Remotion, Motion Canvas): powerful, but you build the
+  recording, editing, brand and audio pipeline yourself. basivo-promo ships it, inside
+  Claude Code.
+- **Agencies and editors**: the best result, at days and budget per video. basivo-promo makes a
+  draft in minutes that an editor can still open and change: every film is plain HTML.
+
 ## Install
 
 Requirements: [Claude Code](https://claude.com/claude-code), [uv](https://docs.astral.sh/uv/),
